@@ -4,6 +4,7 @@ let Cart;
 let Product;
 let User;
 let Chat
+let Ticket
 
 const persistence = config.persistence;
 
@@ -17,10 +18,12 @@ switch (persistence) {
         const { default: ProductDao } = await import('./mongo/classes/products.dao.js');
         const { default: UserDao } = await import('./mongo/classes/users.dao.js');
         const { default: ChatDao } = await import('./mongo/classes/chats.dao.js');
+        const { default: TicketDao } = await import('./mongo/classes/tickets.dao.js');
         Cart = CartDao;
         Product = ProductDao;
         User = UserDao;
         Chat = ChatDao;
+        Ticket = TicketDao;
     break;
 
     case 'MEMORY':
@@ -29,11 +32,13 @@ switch (persistence) {
         const { default: ProductMemory } = await import('./memory/products.memory.js');
         const { default: UserMemory } = await import('./memory/users.memory.js');
         const { default: ChatMemory } = await import('./memory/chats.memory.js');
+        const { default: TicketMemory } = await import('./memory/tickets.memory.js');
         Cart = CartMemory;
         Product = ProductMemory;
         User = UserMemory;
         Chat = ChatMemory;
+        Ticket = TicketMemory;
     break;
 };
 
-export { Cart, Product, User, Chat };
+export { Cart, Product, User, Chat, Ticket };

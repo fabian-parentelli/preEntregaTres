@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 export default class ChatDao {
 
     constructor() { this.path = './src/dao/memory/files/memory.json' };

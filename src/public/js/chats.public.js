@@ -1,50 +1,43 @@
+const token = localStorage.getItem('token');
+let user
+
+window.addEventListener('DOMContentLoaded', async () => {
+    const result = await fetch('/api/users/current', {
+        method: 'GET',
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    user = await result.json();
+    if (user.data.role !== 'user') {
+        window.location.href = 'http://localhost:8080/login';
+    }
+})
+
 const socket = io();
-
-socket.on('connect', () => {
-  console.log('Conectado al servidor de sockets');
-});
-
-socket.on('disconnect', () => {
-  console.log('Desconectado del servidor de sockets');
-});
-
-// const messageInput = document.getElementById('chatBox');
-// const messageLogs = document.getElementById('messageLogs');
-
-// const token = localStorage.getItem('token');
-// if (!token) {
-//   window.location.href = 'http://localhost:8080/login';
-// } else {
-//   initializeChat();
-// };
-
-let user;
 const chatBox = document.getElementById('chatBox');
+const messageLogs = document.getElementById('messageLogs');
 
-swal.fire({
-    title: 'Identificate',
-    input: 'text',
-    text: 'Ingresa el usuario para identificarte en el caht',
-    inputValidator: (value) => {
-        return !value && "Necesitas escribir un nombre de usuario"
-    },
-    allowOutsideClick: false,
-    allowEscapeKey: false
-}).then(result => {
-    user = result.value;
-    socket.emit('authenticated', user);
-});
-
-chatBox.addEventListener('keyup', evt => {
-    if(evt.key === 'Enter') {
-        if(chatBox.value.trim().length > 0) {
-            socket.emit('message', {user, message: chatBox.value});
+chatBox.addEventListener("keyup", async (e) => {
+    if (e.key === "Enter") {
+        if (chatBox.value.trim().length > 0) {
+            await fetch("/api/chats", {
+                method: "POST",
+                body: JSON.stringify({
+                    user: user.data.first_name,
+                    message: chatBox.value,
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
             chatBox.value = "";
         };
     };
 });
 
-socket.on('messagesLogs', data => {
+socket.on('messageLogs', data => {
     let log = document.getElementById('messageLogs');
     let messages = "";
     data.forEach(message => {
@@ -63,4 +56,3 @@ socket.on('newUserConnected', data => {
         icon: 'succes'
     });
 });
-

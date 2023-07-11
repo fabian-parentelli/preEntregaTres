@@ -16,9 +16,12 @@ const getByIdCarts = async (id) => {
 
 const addProductToCarts = async (cid, pid) => {
     try {
-        const cart = await cartManager.getById(cid);
+        const preCart = await cartManager.getById(cid);
         const product = await productManager.getById(pid);
-        const exist = cart.products.findIndex(pro => pro.product.toString() === product._id.toString());
+        const cart = preCart[0]
+
+        const exist = cart.products.findIndex( pro => pro.product._id.toString() === product._id.toString());
+
         if (exist !== -1) {
             cart.products[exist].quantity++;
         } else {
@@ -67,4 +70,10 @@ const deleteAllProducts = async (cid) => {
     };
 };
 
-export { saveCart, getByIdCarts, addProductToCarts, deleteProduct, updateProduct, updateQuantity, deleteAllProducts };
+const purchase = async (cid, user) => {
+
+    const cart = await cartManager.getById(cid)
+
+}
+
+export { saveCart, getByIdCarts, addProductToCarts, deleteProduct, updateProduct, updateQuantity, deleteAllProducts, purchase };

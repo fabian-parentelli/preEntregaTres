@@ -73,4 +73,12 @@ const eliminateAllProducts = async (req, res) => {
     };
 };
 
-export { createCart, getByIdCart, productToCart, removeProduct, modifyCart, modifyQuantity, eliminateAllProducts };
+const purchase = async (req, res) => {
+    const { cid } = req.params;
+    const { user } = req.user;
+    console.log(cid, user);
+    const result = await cartService.purchase(cid, user);
+    res.sendSuccess(result);
+}
+
+export { createCart, getByIdCart, productToCart, removeProduct, modifyCart, modifyQuantity, eliminateAllProducts, purchase };
