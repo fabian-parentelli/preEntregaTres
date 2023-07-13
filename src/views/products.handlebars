@@ -10,25 +10,26 @@
 </div>
 
 <div class="products">
-    {{#each products.docs}}
-        <div>
-            <h2>{{this.title}}</h2>
-            <p>Descripcion: {{this.description}}</p>
-            <p>Código: {{this.code}}</p>
-            <p>Precio: ${{this.price}}</p>
-            <p>Stock: {{this.stock}}</p>
-            <p>Categoría: {{this.category}}</p>
-            <button data-id={{this._id}} class="btn">Agregar al Carrito</button>
-        </div>
+    {{#each products}}
+    <div>
+        <h2>{{this.title}}</h2>
+        <p>Descripcion: {{this.description}}</p>
+        <p>Código: {{this.code}}</p>
+        <p>Precio: ${{this.price}}</p>
+        <p>Stock: {{this.stock}}</p>
+        <p>Categoría: {{this.category}}</p>
+        <button data-id={{this._id}} class="btn">Agregar al Carrito</button>
+    </div>
     {{/each}}
 
-    {{#if products.hasPrevPage}}
-    <a href={{products.prevLink}}><button>Anterior</button></a>
+    {{#if hasPrevPage}}
+    <a href="{{prevLink}}"><button>Anterior</button></a>
     {{/if}}
 
-    {{#if products.hasNextPage}}
-    <a href={{products.nextLink}}><button>Siguiente</button></a>
+    {{#if hasNextPage}}
+    <a href="{{nextLink}}"><button>Siguiente</button></a>
     {{/if}}
+
 </div>
 <script src="/js/index.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

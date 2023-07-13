@@ -8,5 +8,7 @@ export default class VewsRouter extends Router {
         this.get('/login', ['PUBLIC'], passportEnum.NOTHING, vewController.login);
         this.get('/', ['PUBLIC'], passportEnum.NOTHING, vewController.index);
         this.get('/register', ['PUBLIC'], passportEnum.NOTHING, vewController.register);
+        this.get('/products', ['PUBLIC'], passportEnum.NOTHING, vewController.products);
+        this.get('/carts/:cid', ['PUBLIC'], passportEnum.NOTHING, vewController.cart);
     };
 };

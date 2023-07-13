@@ -76,9 +76,20 @@ const eliminateAllProducts = async (req, res) => {
 const purchase = async (req, res) => {
     const { cid } = req.params;
     const { user } = req.user;
-    console.log(cid, user);
-    const result = await cartService.purchase(cid, user);
-    res.sendSuccess(result);
-}
+    try {
+        const result = await cartService.purchase(cid, user);
+
+        if(result.outStock.length < 1) {
+            res.sendSuccess({status: 'Purchase completed', result});
+        } else if(result.outStock.length >= 1) {
+            res.sendSuccess({status: 'Partially completed purchase', result});
+        } else {
+            res.sendClientError(result)
+        };
+
+    } catch (error) {
+        res.sendServerError(error.message);
+    };
+};
 
 export { createCart, getByIdCart, productToCart, removeProduct, modifyCart, modifyQuantity, eliminateAllProducts, purchase };

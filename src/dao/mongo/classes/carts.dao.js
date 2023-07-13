@@ -21,7 +21,7 @@ export default class Cart {
     };
 
     updateProductsDao = async (cid, product) => {
-        return await cartModel.updateOne({ _id: cid }, product);
+        return await cartModel.updateOne({ _id: cid },{$set: {products: product}});
     };
 
     updateQuantityDao = async (cid, pid, quantity) => {

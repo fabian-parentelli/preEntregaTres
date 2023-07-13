@@ -2,7 +2,7 @@ import fs from 'fs';
 
 export default class ChatDao {
 
-    constructor() { this.path = './src/dao/memory/files/memory.json' };
+    constructor() { this.path = './src/dao/memory/files/chats.json' };
 
     saveChat = async (userChat) => {
         const messages = await this.getChat();

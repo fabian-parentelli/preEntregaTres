@@ -9,10 +9,10 @@ window.addEventListener('DOMContentLoaded', async () => {
         }
     })
     user = await result.json();
-    if (user.data.role !== 'user') {
+    if (user.error || user.data.role !== 'user') {
         window.location.href = 'http://localhost:8080/login';
-    }
-})
+    };
+});
 
 const socket = io();
 const chatBox = document.getElementById('chatBox');

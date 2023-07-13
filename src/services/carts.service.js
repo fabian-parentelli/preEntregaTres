@@ -1,5 +1,6 @@
 import CartRepository from '../repsitories/carts.repository.js';
 import ProductRepository from '../repsitories/products.repository.js';
+import { save } from './tickets.service.js';
 
 const cartManager = new CartRepository();
 const productManager = new ProductRepository();
@@ -18,9 +19,9 @@ const addProductToCarts = async (cid, pid) => {
     try {
         const preCart = await cartManager.getById(cid);
         const product = await productManager.getById(pid);
-        const cart = preCart[0]
+        const cart = preCart[0];
 
-        const exist = cart.products.findIndex( pro => pro.product._id.toString() === product._id.toString());
+        const exist = cart.products.findIndex(pro => pro.product._id.toString() === product._id.toString());
 
         if (exist !== -1) {
             cart.products[exist].quantity++;
@@ -72,8 +73,31 @@ const deleteAllProducts = async (cid) => {
 
 const purchase = async (cid, user) => {
 
-    const cart = await cartManager.getById(cid)
+    const preCart = await cartManager.getById(cid);
+    const cart = preCart.pop();
 
-}
+    if (cart.products.length > 0) {
+        let amount = 0;
+        const outStock = [];
+
+        cart.products.forEach(async ({ product, quantity }) => {
+            if (product.stock >= quantity) {
+                amount += product.price * quantity;
+                product.stock -= quantity;
+                await productManager.updateById(product._id, product);
+            } else {
+                outStock.push({ product, quantity });
+            };
+        });
+
+        if (amount > 0) {
+            const ticket = await save(user, amount);
+            const payload = await cartManager.updateProductsDao(cid, outStock);
+            return { ticket, payload, outStock }
+        } else {
+            return { status: 'error', outStock };
+        }
+    };
+};
 
 export { saveCart, getByIdCarts, addProductToCarts, deleteProduct, updateProduct, updateQuantity, deleteAllProducts, purchase };
